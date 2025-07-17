@@ -1,0 +1,28 @@
+version: "3.8"
+
+# 프로덕션 환경용 Docker Compose 설정
+services:
+  web:
+    build: .
+    ports:
+      - "8138:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    # 헬스체크 추가
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 개발 환경용 서비스 (필요시 주석 해제)
+  # web-dev:
+  #   build: .
+  #   ports:
+  #     - "3001:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #   volumes:
+  #     - ./src:/app/src
+  #   command: npm start

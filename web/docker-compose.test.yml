@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  web-test:
+    build: .
+    environment:
+      - NODE_ENV=test
+    command: npm test -- --watchAll=false --coverage
+    volumes:
+      - ./coverage:/app/coverage

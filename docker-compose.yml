@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  # API 서버
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: mechu-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./api/data:/app/data
+    networks:
+      - mechu-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 웹 애플리케이션
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=http://api:3000
+    container_name: mechu-web
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=http://api:3000
+      - REACT_APP_ENV=production
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - mechu-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  mechu-network:
+    driver: bridge
+
+volumes:
+  api-data:
