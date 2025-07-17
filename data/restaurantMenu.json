@@ -1,0 +1,9 @@
+{
+  "restaurantMenus": [
+    { "id": 1, "restaurantId": 1, "menuId": 1 },
+    { "id": 2, "restaurantId": 2, "menuId": 2 },
+    { "id": 3, "restaurantId": 3, "menuId": 3 },
+    { "id": 4, "restaurantId": 4, "menuId": 4 },
+    { "id": 5, "restaurantId": 5, "menuId": 5 }
+  ]
+} 
